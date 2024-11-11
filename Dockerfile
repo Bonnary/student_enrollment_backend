@@ -46,6 +46,5 @@ RUN touch database/database.sqlite \
 RUN php artisan migrate --force
 
 EXPOSE 8000
-EXPOSE 465
 
 CMD php artisan serve --host=0.0.0.0 --port=8000
