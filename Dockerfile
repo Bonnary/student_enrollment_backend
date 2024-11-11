@@ -7,13 +7,12 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     zip \
     unzip \
-    libssl-dev
+    libssl-dev \
+    libcurl4-openssl-dev
 
-# Install PHP extensions required for SMTP
+# Install PHP extensions
 RUN docker-php-ext-install pdo_sqlite && \
-    docker-php-ext-install sockets && \
-    pecl install openssl && \
-    docker-php-ext-enable openssl
+    docker-php-ext-install sockets
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
