@@ -33,13 +33,13 @@ COPY .env.example .env
 # Generate application key
 RUN php artisan key:generate
 
-# Create database directory with proper permissions
-RUN mkdir -p /var/www/html/database && \
-    chown -R www-data:www-data /var/www/html/database && \
-    chmod -R 775 /var/www/html/database
+# Create database directory
+RUN mkdir -p /var/www/html/database
 
-# Create SQLite database file
+# Create and set permissions for SQLite database
 RUN touch /var/www/html/database/database.sqlite && \
+    chown -R www-data:www-data /var/www/html/database && \
+    chmod -R 775 /var/www/html/database && \
     chown www-data:www-data /var/www/html/database/database.sqlite && \
     chmod 664 /var/www/html/database/database.sqlite
 
@@ -47,15 +47,14 @@ RUN touch /var/www/html/database/database.sqlite && \
 RUN chown -R www-data:www-data /var/www/html/storage && \
     chmod -R 775 /var/www/html/storage
 
-# Switch to www-data user for running migrations
-USER www-data
-
-# Run migrations
-RUN php artisan migrate --force
-
-# Switch back to root for CMD
-USER root
+# Create bootstrap/cache directory with proper permissions
+RUN mkdir -p /var/www/html/bootstrap/cache && \
+    chown -R www-data:www-data /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/bootstrap/cache
 
 EXPOSE 8000
+
+# Use www-data user
+USER www-data
 
 CMD php artisan serve --host=0.0.0.0 --port=8000

@@ -10,7 +10,8 @@ services:
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
-      - ./database/database.sqlite:/var/www/html/database/database.sqlite
+      - ./storage:/var/www/html/storage
+      - sqlite-data:/var/www/html/database
     ports:
       - "8000:8000"
     environment:
@@ -27,3 +28,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+volumes:
+  sqlite-data:
