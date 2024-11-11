@@ -1,29 +1,33 @@
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: wu-enrollment-api
-    working_dir: /var/www/html
-    volumes:
-      - .:/var/www/html
-      - ./database/database.sqlite:/var/www/html/database/database.sqlite
-    ports:
-      - "8000:8000"
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_URL=http://localhost:8000
-      - DB_CONNECTION=sqlite
-      - MAIL_MAILER=smtp
-      - MAIL_HOST=smtp.gmail.com
-      - MAIL_PORT=465
-      - MAIL_ENCRYPTION=ssl
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: wu-enrollment-api
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+            - ./database/database.sqlite:/var/www/html/database/database.sqlite
+        ports:
+            - "8000:8000"
+        environment:
+            - APP_ENV=local
+            - APP_DEBUG=true
+            - APP_URL=http://localhost:8000
+            - DB_CONNECTION=sqlite
+            - MAIL_MAILER=smtp
+            - MAIL_HOST=smtp.gmail.com
+            - MAIL_PORT=465
+            - MAIL_ENCRYPTION=ssl
+            - MAIL_USERNAME=mrdcompany941@gmail.com
+            - MAIL_PASSWORD=drgkfigqvxtfmtjy
+            - MAIL_ENCRYPTION=ssl
+            - MAIL_FROM_ADDRESS="mrdcompany941@gmail.com"
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
