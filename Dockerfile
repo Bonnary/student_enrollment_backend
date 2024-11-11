@@ -1,3 +1,4 @@
+# Dockerfile
 FROM php:8.2-fpm
 
 # Install system dependencies
@@ -6,16 +7,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     libsqlite3-dev \
     zip \
-    unzip \
-    libssl-dev \
-    libcurl4-openssl-dev
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_sqlite && \
-    docker-php-ext-install sockets
+    unzip
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_sqlite
 
 # Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -23,17 +21,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer files first
-COPY composer.json composer.lock ./
-
-# Install dependencies
-RUN composer install --no-scripts --no-autoloader --no-dev
-
-# Copy rest of the application
+# Copy project files
 COPY . .
 
-# Generate optimized autoloader
-RUN composer dump-autoload --optimize --no-dev
+# Install dependencies
+RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 # Copy environment file
 COPY .env.example .env
@@ -54,6 +46,5 @@ RUN touch database/database.sqlite \
 RUN php artisan migrate --force
 
 EXPOSE 8000
-EXPOSE 465
 
 CMD php artisan serve --host=0.0.0.0 --port=8000

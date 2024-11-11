@@ -1,4 +1,6 @@
+# docker-compose.yml
 version: '3.8'
+
 services:
   api:
     build:
@@ -11,7 +13,6 @@ services:
       - ./database/database.sqlite:/var/www/html/database/database.sqlite
     ports:
       - "8000:8000"
-      - "465:465"
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
@@ -21,8 +22,6 @@ services:
       - MAIL_HOST=smtp.gmail.com
       - MAIL_PORT=465
       - MAIL_ENCRYPTION=ssl
-      - MAIL_USERNAME=your-email@gmail.com
-      - MAIL_PASSWORD=your-app-password
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
